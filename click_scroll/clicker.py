@@ -17,7 +17,7 @@ class Clicker:
             button = wait.until(
                 EC.element_to_be_clickable((
                     By.XPATH,
-                    "//button[.//span[text()='О товаре']]"
+                    "//button[.//span[text()='Характеристики и описание']]"
                 ))
             )
 

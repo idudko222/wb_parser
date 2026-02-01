@@ -24,12 +24,28 @@ def parse_item_info(url):
             finder = DataFinder(html_page)
             extra_info_block = finder.find_extra_info()
             description_block = finder.find_description()
+            images_block = finder.find_images_block()
+            characteristics_block = finder.find_characteristics_block()
+            price_block = finder.find_price_block()
+            seller_block = finder.find_seller_block()
+            title_block = finder.find_title_block()
+            rating_block = finder.find_rating_block()
+            sizes_block = finder.find_sizes_block()
+
 
             if extra_info_block and description_block:
                 extractor = DataExtractor()
 
                 characteristics = extractor.extract_characteristics(extra_info_block)
                 descriptions = extractor.extract_descriptions(description_block)
+                article = extractor.extract_article(characteristics_block)
+                images_urls = extractor.extract_image_urls(images_block)
+                title = extractor.extract_title(title_block)
+                price = extractor.extract_price(price_block)
+
+                print(title, price)
+
+
 
 
     except Exception as error:

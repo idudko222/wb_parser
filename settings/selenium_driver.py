@@ -66,8 +66,10 @@ class SeleniumDriver:
         if os.path.exists(driver_path):
             service = Service(driver_path)
             self.driver = webdriver.Chrome(service=service, options=options)
+            self.driver.maximize_window()
         else:
             self.driver = webdriver.Chrome(options=options)
+            self.driver.maximize_window()
 
         # Убираем флаг автоматизации в браузере
         if config.get_setting("selenium.disable_automation_flags"):
