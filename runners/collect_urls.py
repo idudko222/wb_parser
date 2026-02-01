@@ -12,7 +12,7 @@ def parse_items_url(url):
     driver = selenium_driver.driver
 
     try:
-        data_parser = PageLoader(driver)
+        data_parser = PageLoader(driver, True)
         html_page = data_parser.load_page(url)
 
         if html_page:
