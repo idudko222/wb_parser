@@ -1,8 +1,8 @@
 from click_scroll.clicker import Clicker
-from data_extractor import DataExtractor
-from data_finder import DataFinder
+from utils.data_extractor import DataExtractor
+from utils.data_finder import DataFinder
 from database import manager
-from page_loader import PageLoader
+from utils.page_loader import PageLoader
 from settings.selenium_driver import SeleniumDriver
 from models.item import Item
 

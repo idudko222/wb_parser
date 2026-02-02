@@ -84,3 +84,26 @@ class DBManager:
                 "UPDATE urls SET is_parsed = 1 WHERE id = ?",
                 (url_id,)
             )
+
+    def get_all_items(self, limit=None) -> list:
+        with self.conn as connection:
+            query = """
+                                        SELECT u.url,
+                                               i.article,
+                                               i.name,
+                                               i.price,
+                                               i.description,
+                                               i.images,
+                                               i.characteristics,
+                                               i.seller_name,
+                                               i.seller_link,
+                                               i.sizes,
+                                               i.rating,
+                                               i.reviews_count
+                                        FROM items i
+                                                 JOIN urls u ON u.id = i.url_id
+                                        """
+            if limit:
+                query += f" LIMIT {int(limit)}"
+            cursor = connection.execute(query)
+            return cursor.fetchall()
