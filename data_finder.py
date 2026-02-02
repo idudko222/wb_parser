@@ -42,6 +42,7 @@ class DataFinder:
             'div',
             class_=lambda x: x and 'productSummary' in x
         )
+
     @debug_decorator
     def find_seller_block(self):
         """Находит блок информации о продавце."""
@@ -62,27 +63,16 @@ class DataFinder:
     @debug_decorator
     def find_rating_block(self):
         """Находит блок рейтинга и отзывов товара."""
-        block = self.soup.find(
-            'span',
-            class_=lambda x: x and 'rating' in x.lower()
-        )
-        return block
-
-    # @debug_decorator
-    # def find_reviews_block(self):
-    #     """Находит блок количества отзывов."""
-    #     block = self.soup.find(
-    #         'a',
-    #         href=lambda x: x and 'productCommonInfo' in x
-    #     )
-    #     return block
+        return self.soup.select_one(
+            'span[class*="productReviewRating"]'
+        )  # верный селектор
 
     @debug_decorator
     def find_sizes_block(self):
         """Находит блок размеров."""
         block = self.soup.find(
             'div',
-            class_=lambda x: x and 'sizes' in x.lower()
+            class_='sizesWrap--X6cGL'
         )
         return block
 

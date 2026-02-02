@@ -1,5 +1,6 @@
 import sqlite3
 from typing import List
+import json
 
 
 class DBManager:
@@ -31,3 +32,55 @@ class DBManager:
             except sqlite3.Error as e:
                 print(f'Ошибка при получении URL: {e}')
                 return []
+
+    def save_item(self, item):
+        with self.conn as connection:
+            # получаем id url
+            cursor = connection.execute(
+                "SELECT id FROM urls WHERE url = ?",
+                (item.link,)
+            )
+            row = cursor.fetchone()
+
+            if not row:
+                print("URL не найден в таблице urls")
+                return
+
+            url_id = row[0]
+
+            connection.execute("""
+                INSERT OR REPLACE INTO items (
+                    url_id,
+                    article,
+                    name,
+                    price,
+                    description,
+                    images,
+                    characteristics,
+                    seller_name,
+                    seller_link,
+                    sizes,
+                    rating,
+                    reviews_count
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                url_id,
+                item.article,
+                item.name,
+                item.price,
+                item.description,
+                json.dumps(item.images, ensure_ascii=False),
+                json.dumps(item.characteristics, ensure_ascii=False),
+                item.seller_name,
+                item.seller_link,
+                json.dumps(item.sizes, ensure_ascii=False),
+                item.rating,
+                item.reviews_count
+            ))
+
+            # помечаем url как обработанный
+            connection.execute(
+                "UPDATE urls SET is_parsed = 1 WHERE id = ?",
+                (url_id,)
+            )

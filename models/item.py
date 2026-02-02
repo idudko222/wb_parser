@@ -4,14 +4,13 @@ class Item:
             link: str = None,
             article: str = None,
             name: str = None,
-            price: float = None,
+            price: int = None,
             description: str = None,
             images: list[str] = None,
             characteristics: dict = None,
             seller_name: str = None,
             seller_link: str = None,
             sizes: list[str] = None,
-            stock: int = None,
             rating: float = None,
             reviews_count: int = None
     ):
@@ -25,7 +24,6 @@ class Item:
         self.seller_name = seller_name
         self.seller_link = seller_link
         self.sizes = sizes or []  # список строк
-        self.stock = stock
         self.rating = rating
         self.reviews_count = reviews_count
 

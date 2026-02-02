@@ -4,12 +4,9 @@ from data_finder import DataFinder
 from database import manager
 from page_loader import PageLoader
 from settings.selenium_driver import SeleniumDriver
+from models.item import Item
 
-
-def parse_item_info(url):
-    selenium_driver = SeleniumDriver()
-    driver = selenium_driver.driver
-
+def parse_item_info(url, driver):
     try:
         data_parser = PageLoader(driver, scroll=False)
         html_page = data_parser.load_page(url)
@@ -32,7 +29,6 @@ def parse_item_info(url):
             rating_block = finder.find_rating_block()
             sizes_block = finder.find_sizes_block()
 
-
             if extra_info_block and description_block:
                 extractor = DataExtractor()
 
@@ -42,11 +38,28 @@ def parse_item_info(url):
                 images_urls = extractor.extract_image_urls(images_block)
                 title = extractor.extract_title(title_block)
                 price = extractor.extract_price(price_block)
+                seller_name = extractor.extract_seller_name(seller_block)
+                seller_url = extractor.extract_seller_url(seller_block)
+                available_sizes = extractor.extract_sizes(sizes_block)
+                item_rating = extractor.extract_item_rating(rating_block)
+                item_number_of_rev = extractor.extract_number_of_reviews(rating_block)
 
-                print(title, price)
+                item = Item(
+                    link=url,
+                    article=article,
+                    name=title,
+                    price=price,
+                    description=descriptions,
+                    images=images_urls,
+                    characteristics=characteristics,
+                    seller_name=seller_name,
+                    seller_link=seller_url,
+                    sizes=available_sizes,
+                    rating=item_rating,
+                    reviews_count=item_number_of_rev
+                )
 
-
-
+                manager.save_item(item)
 
     except Exception as error:
         print(error)
@@ -55,5 +68,10 @@ def parse_item_info(url):
 manager = manager.DBManager()
 urls = manager.get_urls()
 
+selenium_driver = SeleniumDriver()
+driver = selenium_driver.driver
+
 for url in urls:
-    parse_item_info(url)
+    parse_item_info(url, driver)
+
+driver.quit()
