@@ -99,19 +99,23 @@
 ├── database/
 │   ├── data.db          # Файл базы данных SQLite
 │   └── manager.py       # Менеджер для работы с БД (DBManager)
+│   └── create_tables.py # Менеджер для создания таблиц
 ├── models/
 │   └── item.py          # Модель данных товара
 ├── settings/
 │   └── selenium_driver.py # Настройка Selenium WebDriver
+│   └── config.py # Настройка поведения selenium (взяты из старого проета)
 ├── utils/
 │   ├── data_finder.py   # Поиск HTML-блоков (DataFinder)
 │   ├── data_extractor.py # Извлечение данных (DataExtractor)
 │   └── page_loader.py   # Загрузка страниц (PageLoader)
 ├── click_scroll/
 │   └── clicker.py       # Утилиты для взаимодействия со страницей
-├── create_tables.py     # Скрипт инициализации БД
-├── parse_items_url.py   # Скрипт этапа 1 (парсинг ссылок)
-├── parse_item_info.py   # Скрипт этапа 2 (парсинг данных)
+│   └── emulation.py       # Эмуляция поведения человека (не используется, взято из старого проекта)
+├── runners/
+│   └── collect_urls.py   # Скрипт этапа 1 (парсинг ссылок)
+│   └── collect_extended_info.py   # Скрипт этапа 2 (парсинг данных)
+│   └── get_xlsx.py  # Скрипт этапа 1 (парсинг ссылок)
 └── requirements.txt     # Зависимости проекта
 ```
 
@@ -150,14 +154,14 @@ python create_tables.py
 ### 5. Парсинг ссылок на товары
 Собирает ссылки с поисковой выдачи и сохраняет их в БД.
 ```bash
-python parse_items_url.py
+python collect_urls.py
 ```
 **Результат:** В таблице `urls` появятся ссылки с флагом `is_parsed = False`.
 
 ### 6. Парсинг данных о товарах
 Обрабатывает все необработанные ссылки, собирая детальную информацию.
 ```bash
-python parse_item_info.py
+python collect_extended_info.py
 ```
 **Результат:** Данные сохраняются в таблицу `items`, ссылки помечаются как обработанные (`is_parsed = True`).
 
